@@ -2,6 +2,8 @@ import React, { useRef, useEffect } from "react";
 import {Link, useNavigate } from "react-router-dom";
 import {useLocation} from 'react-router-dom';
 import { FaChevronLeft, FaChevronRight, FaArrowRight } from "react-icons/fa";
+//This is seperate page only for DBMS Lab Subject
+
 
 const Home = () => {
   const sliderRef = useRef(null);
@@ -56,7 +58,7 @@ const Home = () => {
     },
   ];
 
-  // Auto-Scroll Logic
+  
   useEffect(() => {
     const interval = setInterval(() => {
       if (sliderRef.current) {
@@ -81,7 +83,7 @@ const Home = () => {
     }
   };
 const location = useLocation();
-  // Grab the secret ID we passed from the Subjects page
+  
   const subjectId = location.state?.subjectId;
   return (
     <div
@@ -91,7 +93,7 @@ const location = useLocation();
         paddingBottom: "50px",
       }}
     >
-      {/* Header */}
+     
       <div
         className="text-white text-center position-relative"
         style={{
@@ -114,7 +116,7 @@ const location = useLocation();
       </div>
 
       <div className="container" style={{ marginTop: "-80px" }}>
-        {/* --- WELCOME CARD --- */}
+       
         <div
           className="card border-0 shadow-sm mb-5"
           style={{ borderRadius: "16px", backgroundColor: "#ffffff" }}
@@ -164,7 +166,7 @@ const location = useLocation();
           </div>
         </div>
 
-        {/* Slider Section */}
+      
         <div className="position-relative px-4">
           <div className="d-flex justify-content-between align-items-end mb-3 px-2">
             <h4 className="fw-bold text-dark m-0">Practical Assignments</h4>
@@ -199,7 +201,7 @@ const location = useLocation();
                   cursor: "pointer",
                 }}
               >
-                {/* --- ASSIGNMENT CARD --- */}
+               
                 <div
                   className="card h-100 border-0 shadow-sm assignment-card"
                   style={{
@@ -209,7 +211,7 @@ const location = useLocation();
                   }}
                 >
                   <div className="card-body p-4 d-flex flex-column align-items-center justify-content-center text-center">
-                    {/* THE NEW LAB BADGE WITH HOVER EFFECT */}
+                  
                     <div className="mb-3">
                       <h5
                         className="fw-bold m-0 lab-badge"
@@ -219,7 +221,6 @@ const location = useLocation();
                       </h5>
                     </div>
 
-                    {/* Title */}
                     <h6
                       className="fw-bold text-dark mb-2"
                       style={{ fontSize: "1.05rem" }}
@@ -227,7 +228,7 @@ const location = useLocation();
                       {task.title}
                     </h6>
 
-                    {/* Description */}
+                
                     <p
                       className="text-secondary small mb-0"
                       style={{ lineHeight: "1.5" }}
@@ -256,20 +257,20 @@ const location = useLocation();
         </div>
       </div>
 
-      {/* --- HOVER EFFECTS CSS --- */}
+     
       <style>{`
-        /* Card Hover */
+      
         .assignment-card:hover {
             transform: translateY(-8px) scale(1.02);
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1) !important;
             border: 1px solid #e2e8f0;
         }
 
-        /* Default state of the Lab Text */
+       
         .lab-badge {
-            color: #0d6efd; /* Blue text */
+            color: #0d6efd; 
             background-color: transparent;
-            border: 2px solid transparent; /* Keeps layout from jumping */
+            border: 2px solid transparent; 
             padding: 6px 16px;
             border-radius: 8px;
             transition: all 0.3s ease;
