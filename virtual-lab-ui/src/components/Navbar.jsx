@@ -5,10 +5,10 @@ import pictLogo from '../assets/logo.png';
 const Navbar = () => {
   const navigate = useNavigate();
 
-  // Pulling data from localStorage
+ 
   const token = localStorage.getItem("token");
   const userName = localStorage.getItem("userName");
-  // Check if the user is an admin
+ 
   const isAdmin = localStorage.getItem("isAdmin") === "true"; 
 
   const getInitial = (name) => {
@@ -34,20 +34,20 @@ const Navbar = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark shadow-sm sticky-top" style={{ backgroundColor: '#1a2238' }}>
       <div className="container">
-        {/* Logo Section */}
+        
         <Link className="navbar-brand d-flex align-items-center gap-3" to="/">
           <img 
             src={pictLogo} 
             alt="PICT Logo" 
             height="45" 
-            className="d-inline-block align-text-top bg-white rounded-circle p-1" 
+            className="d-inline-block align-text-top bg-white rounded-circle" 
           />
           <div className="d-flex flex-column" style={{ lineHeight: '1.2' }}>
             <span className="fw-bold text-white" style={{ fontSize: '1.2rem', letterSpacing: '1px' }}>ECE Virtual Labs</span>
           </div>
         </Link>
         
-        {/* Toggle Button */}
+        
         <button 
           className="navbar-toggler border-0 shadow-none" 
           type="button" 
@@ -58,7 +58,7 @@ const Navbar = () => {
           <span className="navbar-toggler-icon"></span>
         </button>
         
-        {/* The Offcanvas Side Menu */}
+       
         <div 
           className="offcanvas offcanvas-end" 
           tabIndex="-1" 
@@ -77,24 +77,24 @@ const Navbar = () => {
           </div>
 
           <div className="offcanvas-body d-flex flex-column">
-            {/* 👇 FIXED LINE: Changed ms-auto to ms-lg-auto and made items center on mobile 👇 */}
+           
             <ul className="navbar-nav ms-lg-auto gap-4 align-items-center">
               
               <li className="nav-item">
                 <Link className="nav-link text-white fw-bold hover-underline text-center" to="/" onClick={closeMenu}>Home</Link>
               </li>
 
-              {/* DYNAMIC AUTHENTICATION SECTION */}
+              {/*  Authentication */}
               {token ? (
                 <>
                   {isAdmin && (
                     <li className="nav-item mt-3 mt-lg-0 w-100 d-flex justify-content-center">
                       <Link 
                         to="/admin-dashboard" 
-                        className="btn btn-danger px-4 rounded-pill fw-bold shadow-sm" 
+                        className="btn btn-danger px-4 text-nowrap rounded-pill fw-bold shadow-sm" 
                         onClick={closeMenu}
                       >
-                        ⚙️ Admin Panel
+                         Admin Panel
                       </Link>
                     </li>
                   )}
@@ -134,3 +134,5 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
+
