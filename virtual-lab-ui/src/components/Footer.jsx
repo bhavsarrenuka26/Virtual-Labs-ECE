@@ -29,11 +29,6 @@ const Footer = () => {
             {/* Copyright & Links */}
             <div className="col-md-6 d-flex flex-column justify-content-center ps-md-5">
               <p className="mb-2">© 2026 ECE Dept, PICT | All Rights Reserved</p>
-              
-              <div className="d-flex gap-3">
-                <Link to="/team" className="text-warning text-decoration-none fw-bold">Our Team</Link>
-                <Link to="/about" className="text-warning text-decoration-none fw-bold">About Us</Link>
-              </div>
             </div>
           </div>
         </div>
