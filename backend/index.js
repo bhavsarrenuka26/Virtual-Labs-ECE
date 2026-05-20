@@ -25,8 +25,7 @@ app.use('/api/assignments', assignmentRoutes);
 const authRoutes = require('./routes/auth');
 app.use('/api/auth', authRoutes);
 
-const scoreRoutes = require('./routes/scores');
-app.use('/api/scores', scoreRoutes);
+
 
 const aiRoutes = require('./routes/aiRoutes'); 
 app.use('/api/ai', aiRoutes);
