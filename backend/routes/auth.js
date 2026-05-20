@@ -4,6 +4,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const User = require('../models/User');
 const verifyToken = require('../middleware/verifyToken');
@@ -201,6 +203,7 @@ router.post('/submit-quiz', verifyToken, async (req, res) => {
 });
 
 //forgot password
+
 router.post('/forgot-password', async (req, res) => {
   try {
     const user = await User.findOne({ email: req.body.email });
@@ -208,38 +211,24 @@ router.post('/forgot-password', async (req, res) => {
       return res.status(404).json({ error: "No user found with this email" });
     }
 
-
     const resetToken = crypto.randomBytes(20).toString('hex');
-
 
     user.resetPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex');
     user.resetPasswordExpire = Date.now() + 15 * 60 * 1000; // 15 minutes
     await user.save();
 
-
     const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
-
-    //  Set up Nodemailer to send the email
-    const transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 465,
-      secure: true,
-      family: 4,
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-      }
-    });
 
     const message = `
       <h1>You requested a password reset</h1>
       <p>Please click on the following link to reset your password:</p>
-      <a href=${resetUrl} clicktracking=off>${resetUrl}</a>
+      <a href="${resetUrl}" clicktracking=off>${resetUrl}</a>
+      <p>This link will expire in 15 minutes.</p>
       <p>If you did not request this, please ignore this email.</p>
     `;
 
-    await transporter.sendMail({
-      from: `"ECE-Virtual-Labs" <${process.env.EMAIL_USER}>`,
+    await resend.emails.send({
+      from: 'ECE-Virtual-Labs <onboarding@resend.dev>',
       to: user.email,
       subject: 'Virtual Labs - Password Reset',
       html: message
@@ -253,15 +242,13 @@ router.post('/forgot-password', async (req, res) => {
   }
 });
 
-//reset password
+//Reset Password 
 router.put('/reset-password/:token', async (req, res) => {
   try {
-
     const resetPasswordToken = crypto
       .createHash('sha256')
       .update(req.params.token)
       .digest('hex');
-
 
     const user = await User.findOne({
       resetPasswordToken,
@@ -272,10 +259,8 @@ router.put('/reset-password/:token', async (req, res) => {
       return res.status(400).json({ error: "Invalid or expired token" });
     }
 
-
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(req.body.password, salt);
-
 
     user.resetPasswordToken = undefined;
     user.resetPasswordExpire = undefined;
@@ -288,4 +273,6 @@ router.put('/reset-password/:token', async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 });
+
+module.exports = router;
 module.exports = router;
