@@ -19,8 +19,6 @@ import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import SubjectLabs from "./pages/SubjectLabs";
 import AdminDashboard from "./pages/AdminDashboard";
-import AboutUs from "./pages/AboutUs";
-import OurTeam from "./pages/OurTeam";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 
@@ -96,8 +94,6 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
-          <Route path="/about" element={<AboutUs />} />
-          <Route path="/team" element={<OurTeam />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
         </Routes>
