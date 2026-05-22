@@ -62,31 +62,36 @@ const Assignments = () => {
         <div className="row justify-content-center">
           <div className="col-lg-10">
             {labs.length > 0 ? (
-              labs.map((lab, index) => (
-                <div 
-                  className="card shadow-sm border-0 mb-4 rounded-4" 
-                  key={lab._id}
-                  style={{ backgroundColor: "rgba(255, 255, 255, 0.95)" }} 
-                >
-                  <div className="card-body p-4 d-flex justify-content-between align-items-center flex-wrap gap-3">
-                    <div>
-                      <h5 className="fw-bold mb-1" style={{ color: "#102b51" }}>
-                        Experiment {index + 1}: {lab.title}
-                      </h5>
-                      <p className="text-secondary mb-0">{lab.shortDesc}</p>
-                    </div>
-                    
-                    
-                    <Link 
-                      to={`/assignment/${lab._id}`} 
-                      className="btn fw-bold px-4 rounded-pill shadow-sm hover-lift"
-                      style={{ backgroundColor: "#102b51", color: "white" }}
-                    >
-                      Start Lab ➔
-                    </Link>
-                  </div>
-                </div>
-              ))
+              [...labs]
+  .sort((a, b) => a.assignmentId - b.assignmentId)
+  .map((lab) => (   // use lab.assignmentId, not index
+    <div className="col-12" key={lab._id}>  
+      <div
+        className="card shadow-sm border-0 mb-4 rounded-4"
+        style={{ backgroundColor: "rgba(255, 255, 255, 0.95)" }}
+      >
+        <div className="card-body p-4 d-flex justify-content-between align-items-center flex-wrap gap-3">
+          <div>
+            <span className="badge rounded-pill mb-2"
+              style={{ backgroundColor: "#dbeafe", color: "#1e40af" }}>
+              Practical {lab.assignmentId}   
+            </span>
+            <h5 className="fw-bold mb-1" style={{ color: "#102b51" }}>
+              Experiment {lab.assignmentId}: {lab.title}
+            </h5>
+            <p className="text-secondary mb-0">{lab.shortDesc}</p>
+          </div>
+          <Link
+            to={`/assignment/${lab._id}`}
+            className="btn fw-bold px-4 rounded-pill shadow-sm"
+            style={{ backgroundColor: "#102b51", color: "white" }}
+          >
+            Start Lab ➔
+          </Link>
+        </div>
+      </div>
+    </div>
+  ))
             ) : (
               <div className="text-center py-5 card border-0 shadow-sm rounded-4" style={{ backgroundColor: "rgba(255, 255, 255, 0.95)" }}>
                 <h4 className="text-muted">No experiments uploaded yet!</h4>
