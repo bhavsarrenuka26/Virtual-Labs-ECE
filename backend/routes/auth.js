@@ -4,9 +4,11 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
-const { Resend } = require('resend');
-const resend = new Resend(process.env.RESEND_API_KEY);
+const { BrevoClient } = require("@getbrevo/brevo");
 
+const brevo = new BrevoClient({
+  apiKey: process.env.BREVO_API_KEY
+});
 const User = require('../models/User');
 const verifyToken = require('../middleware/verifyToken');
 const verifyAdmin = require('../middleware/verifyAdmin')
@@ -211,8 +213,8 @@ router.post('/forgot-password', async (req, res) => {
       return res.status(404).json({ error: "No user found with this email" });
     }
 
+    
     const resetToken = crypto.randomBytes(20).toString('hex');
-
     user.resetPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex');
     user.resetPasswordExpire = Date.now() + 15 * 60 * 1000; // 15 minutes
     await user.save();
@@ -226,28 +228,42 @@ router.post('/forgot-password', async (req, res) => {
       <p>This link will expire in 15 minutes.</p>
       <p>If you did not request this, please ignore this email.</p>
     `;
+    
     console.log("Attempting to send email to:", user.email);
 
+    // Using the new Brevo v6 client structure
+    try {
+      await brevo.transactionalEmails.sendTransacEmail({
+        sender: { email: process.env.EMAIL_USER, name: 'ECE-Virtual-Labs' },
+        to: [{ email: user.email }],
+        subject: 'Virtual Labs - Password Reset',
+        htmlContent: message
+      });
+      
+      console.log("Email sent successfully");
+      res.status(200).json({ message: "Email sent successfully!" });
 
-    await resend.emails.send({
-      from: 'ECE-Virtual-Labs <onboarding@resend.dev>',
-      to: "bhavsarrenu.26@gmail.com",
-      subject: 'Virtual Labs - Password Reset',
-      html: message
-    });
-    console.log("Email sent successfully");
-
-    res.status(200).json({ message: "Email sent successfully!" });
+    } catch (emailError) {
+      console.error("Brevo Email Error:", emailError);
+      
+      
+      user.resetPasswordToken = undefined;
+      user.resetPasswordExpire = undefined;
+      await user.save({ validateBeforeSave: false });
+      
+      return res.status(500).json({ error: "Email could not be sent" });
+    }
 
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Email could not be sent" });
+    res.status(500).json({ error: "Server error" });
   }
 });
 
-//Reset Password 
+// Reset Password
 router.put('/reset-password/:token', async (req, res) => {
   try {
+  
     const resetPasswordToken = crypto
       .createHash('sha256')
       .update(req.params.token)
@@ -255,18 +271,21 @@ router.put('/reset-password/:token', async (req, res) => {
 
     const user = await User.findOne({
       resetPasswordToken,
-      resetPasswordExpire: { $gt: Date.now() }
+      resetPasswordExpire: { $gt: Date.now() } 
     });
 
     if (!user) {
       return res.status(400).json({ error: "Invalid or expired token" });
     }
 
+    // Hash the new password
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(req.body.password, salt);
 
+  
     user.resetPasswordToken = undefined;
     user.resetPasswordExpire = undefined;
+    
     await user.save();
 
     res.status(200).json({ message: "Password updated successfully!" });
@@ -276,6 +295,5 @@ router.put('/reset-password/:token', async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 });
-
 module.exports = router;
 module.exports = router;
