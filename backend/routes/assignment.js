@@ -7,9 +7,20 @@ const verifyAdmin = require('../middleware/verifyAdmin');
 
 // 1. Fetch all assignments
 
+router.get('/subject/:subjectId', async (req, res) => {
+  try {
+    const assignments = await Assignment.find({ 
+      subjectId: req.params.subjectId 
+    }).sort({ assignmentId: 1 }); 
+    
+    res.status(200).json(assignments);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching labs", error });
+  }
+});
 router.get('/', async (req, res) => {
     try {
-        const assignments = await Assignment.find();
+        const assignments = await Assignment.find().sort({ assignmentId: 1 });
         res.status(200).json(assignments);
     } catch (error) {
         res.status(500).json({ message: "Error fetching assignments", error });
