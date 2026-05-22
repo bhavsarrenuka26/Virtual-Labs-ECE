@@ -226,13 +226,16 @@ router.post('/forgot-password', async (req, res) => {
       <p>This link will expire in 15 minutes.</p>
       <p>If you did not request this, please ignore this email.</p>
     `;
+    console.log("Attempting to send email to:", user.email);
+
 
     await resend.emails.send({
       from: 'ECE-Virtual-Labs <onboarding@resend.dev>',
-      to: user.email,
+      to: "bhavsarrenu.26@gmail.com",
       subject: 'Virtual Labs - Password Reset',
       html: message
     });
+    console.log("Email sent successfully");
 
     res.status(200).json({ message: "Email sent successfully!" });
 
