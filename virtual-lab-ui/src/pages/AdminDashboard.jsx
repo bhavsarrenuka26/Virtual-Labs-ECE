@@ -6,7 +6,7 @@ export default function AdminDashboard() {
   const [labs, setLabs] = useState([]);
   const [subjects, setSubjects] = useState([]);
 
- 
+
   const [editingId, setEditingId] = useState(null);
   const [editForm, setEditForm] = useState({
     demoVideoUrl: "",
@@ -16,14 +16,14 @@ export default function AdminDashboard() {
     theory: "",
   });
 
-  
+
   const [editQuizQuestions, setEditQuizQuestions] = useState([]);
   const [editTempQuestion, setEditTempQuestion] = useState({
     questionText: "", opt1: "", opt2: "", opt3: "", opt4: "", correctIndex: 0
   });
   const [showAddEditQuestion, setShowAddEditQuestion] = useState(false);
 
-  
+
   const [newSubjectData, setNewSubjectData] = useState({
     name: "",
     year: "SE",
@@ -342,7 +342,7 @@ export default function AdminDashboard() {
               <span className="badge bg-light text-dark border">{subject.assignments.length} Labs</span>
             </div>
 
-           
+
             <div className="row g-3 mb-3">
               {subject.assignments.map((lab) => (
                 <div key={lab._id} className="col-12">
@@ -356,23 +356,25 @@ export default function AdminDashboard() {
                     }}
                   >
                     <div className="card-body py-3 px-4">
-                      <div className="d-flex justify-content-between align-items-center">
-                        <span className="fw-bold text-dark">{lab.title}</span>
+                      <div className="d-flex justify-content-between align-items-start gap-2 flex-wrap">
+                        <span className="fw-bold text-dark" style={{ flex: 1, minWidth: 0 }}>
+                          {lab.title}
+                        </span>
                         {editingId !== lab._id && (
                           <button
-                            className="btn btn-sm btn-outline-navy edit-zone"
+                            className="btn btn-sm btn-outline-navy edit-zone flex-shrink-0"
                             onClick={(e) => { e.stopPropagation(); handleEditClick(lab); }}
                           >
-                             Edit Content
+                             Edit
                           </button>
                         )}
                       </div>
 
-                    
+
                       {editingId === lab._id && (
                         <div className="mt-3 edit-zone">
 
-                          
+
                           <div className="p-3 bg-white border rounded mb-3">
                             <p className="fw-bold text-dark mb-3" style={{ fontSize: "13px", textTransform: "uppercase", letterSpacing: "0.05em", color: "#64748b" }}>Lab Content</p>
                             <div className="row">
