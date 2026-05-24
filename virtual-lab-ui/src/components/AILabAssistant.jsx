@@ -15,8 +15,7 @@ const AILabAssistant = ({ labId }) => {
     setResponse("");
 
     try {
-      const apiUrl =
-        import.meta.env.VITE_API_URL;
+      const apiUrl = import.meta.env.VITE_API_URL;
 
       const res = await fetch(`${apiUrl}/api/ai/ask`, {
         method: "POST",
@@ -43,35 +42,34 @@ const AILabAssistant = ({ labId }) => {
     }
   };
 
- 
   if (!isOpen) {
     return (
-     <button
-  onClick={() => setIsOpen(true)}
-  className="btn shadow-lg border-0 d-flex align-items-center justify-content-center"
-  style={{
-    width: "65px",
-    height: "65px",
-    borderRadius: "50%",
-    position: "fixed",
-    bottom: "25px",
-    right: "25px",
-    zIndex: 999,
-    background: "linear-gradient(135deg, #16213e, #1a4ed8)",
-    padding: 0,
-  }}
->
-  <lord-icon
-    src="https://cdn.lordicon.com/bpptgtfr.json"
-    trigger="morph"
-    state="morph-neutral"
-    colors="primary:#ffffff,secondary:#ffffff"
-    style={{
-      width: "42px",
-      height: "42px",
-    }}
-  ></lord-icon>
-</button>
+      <button
+        onClick={() => setIsOpen(true)}
+        className="btn shadow-lg border-0 d-flex align-items-center justify-content-center"
+        style={{
+          width: "65px",
+          height: "65px",
+          borderRadius: "50%",
+          position: "fixed",
+          bottom: "25px",
+          right: "25px",
+          zIndex: 999,
+          background: "linear-gradient(135deg, #16213e, #1a4ed8)",
+          padding: 0,
+        }}
+      >
+        <lord-icon
+          src="https://cdn.lordicon.com/bpptgtfr.json"
+          trigger="morph"
+          state="morph-neutral"
+          colors="primary:#ffffff,secondary:#ffffff"
+          style={{
+            width: "42px",
+            height: "42px",
+          }}
+        ></lord-icon>
+      </button>
     );
   }
 
@@ -79,8 +77,10 @@ const AILabAssistant = ({ labId }) => {
     <div
       className="shadow-lg"
       style={{
-        width: "360px",
+        width: "calc(100vw - 40px)", 
+        maxWidth: "360px",
         height: "500px",
+        maxHeight: "calc(100vh - 40px)", 
         position: "fixed",
         bottom: "20px",
         right: "20px",
@@ -93,7 +93,6 @@ const AILabAssistant = ({ labId }) => {
         border: "1px solid rgba(255,255,255,0.2)",
       }}
     >
-    
       <div
         style={{
           background: "linear-gradient(135deg, #0f172a, #1d4ed8)",
@@ -125,7 +124,6 @@ const AILabAssistant = ({ labId }) => {
         </button>
       </div>
 
-    
       <div
         style={{
           flex: 1,
@@ -158,7 +156,6 @@ const AILabAssistant = ({ labId }) => {
             }}
           >
             <strong>Viro:</strong>
-
             <div style={{ marginTop: "8px" }}>
               {response}
             </div>
@@ -178,7 +175,6 @@ const AILabAssistant = ({ labId }) => {
         )}
       </div>
 
-   
       <form
         onSubmit={askQuestion}
         style={{
@@ -202,6 +198,7 @@ const AILabAssistant = ({ labId }) => {
             padding: "12px",
             outline: "none",
             fontSize: "14px",
+            minWidth: "0", 
           }}
         />
 
@@ -211,10 +208,11 @@ const AILabAssistant = ({ labId }) => {
           style={{
             border: "none",
             background: "linear-gradient(135deg, #0f172a, #1d4ed8)",
-             color: "white",
+            color: "white",
             padding: "0 18px",
             borderRadius: "12px",
             fontWeight: "600",
+            flexShrink: 0, 
           }}
         >
           Ask
