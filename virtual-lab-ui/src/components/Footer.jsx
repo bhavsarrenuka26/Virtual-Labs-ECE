@@ -3,6 +3,7 @@ import { FaHome, FaPhoneAlt, FaEnvelope } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
+  const currentyear = new Date().getFullYear()
   return (
     <footer className="text-white py-4 mt-auto" style={{ backgroundColor: '#1a2238' }}>
       <div className="container">
@@ -28,7 +29,7 @@ const Footer = () => {
 
             {/* Copyright & Links */}
             <div className="col-md-6 d-flex flex-column justify-content-center ps-md-5">
-              <p className="mb-2">© 2026 ECE Dept, PICT | All Rights Reserved</p>
+              <p className="mb-2">&copy; {currentyear} ECE Dept, PICT | All Rights Reserved</p>
             </div>
           </div>
         </div>
