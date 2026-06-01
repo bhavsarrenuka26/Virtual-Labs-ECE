@@ -14,7 +14,9 @@ const Assignments = () => {
       try {
         console.log("1. Reading URL Parameter. subjectId is:", subjectId); 
         const response = await fetch(`${import.meta.env.VITE_API_URL}/api/assignments/subject/${subjectId}`);
+        
         const data = await response.json();
+        await new Promise(resolve => setTimeout(resolve, 3000))
         
         console.log("2. Data received from backend:", data); 
         
@@ -30,7 +32,25 @@ const Assignments = () => {
   }, [subjectId]);
 
   if (isLoading) {
-    return <div className="text-center py-5 mt-5"><div className="spinner-border text-primary"></div></div>;
+    return (
+    <div className="vh-100 d-flex justify-content-center align-items-center bg-light">
+      <div
+        className="text-center p-5"
+        style={{
+          backdropFilter: "blur(10px)",
+          background: "rgba(255,255,255,0.6)",
+          borderRadius: "20px",
+          boxShadow: "0 8px 32px rgba(0,0,0,0.1)",
+        }}
+      >
+        <div className="spinner-border text-success mb-3" />
+        <h4>Almost There!</h4>
+        <p className="text-muted">
+          Please Wait!!
+        </p>
+      </div>
+    </div>
+  );
   }
 
   return (
