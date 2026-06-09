@@ -45,9 +45,20 @@ const Profile = () => {
 
   if (isLoading) {
     return (
-      <div className="text-center py-5 mt-5">
-        <div className="spinner-border text-primary" />
+      <div className="d-flex flex-column justify-content-center align-items-center vh-100">
+      <div
+        className="spinner-border text-primary mb-3"
+        role="status"
+        style={{ width: "4rem", height: "4rem" }}
+      >
+        <span className="visually-hidden">Loading...</span>
       </div>
+
+      <h4 className="fw-bold">Loading Your Profile Details..!!</h4>
+      <p className="text-muted">
+        Please wait while we prepare everything for you...
+      </p>
+    </div>
     );
   }
 
