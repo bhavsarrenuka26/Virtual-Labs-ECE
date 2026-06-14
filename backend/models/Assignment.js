@@ -1,15 +1,15 @@
 const mongoose = require('mongoose');
 
 const assignmentSchema = new mongoose.Schema({
-  assignmentId: { 
-    type: Number, 
-    required: true 
+  assignmentId: {
+    type: Number,
+    required: true
 
   },
- 
-  subjectId: { 
-    type: mongoose.Schema.Types.ObjectId, 
-    ref: 'Subject' 
+
+  subjectId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Subject'
   },
   title: { type: String, required: true },
   shortDesc: { type: String },
@@ -17,8 +17,8 @@ const assignmentSchema = new mongoose.Schema({
     aim: String,
     theory: {
       type: String,
-      default: "" 
-  },
+      default: ""
+    },
   },
   demoVideoUrl: { type: String },
   quiz: [
@@ -37,7 +37,11 @@ const assignmentSchema = new mongoose.Schema({
       url: String
     }
   ],
-  labManualLink: String
+  labManualLink: String,
+  isActive: {
+    type: Boolean,
+    default: true
+  }
 });
 
 module.exports = mongoose.model('Assignment', assignmentSchema);
