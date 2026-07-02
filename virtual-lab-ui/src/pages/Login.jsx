@@ -109,7 +109,7 @@ const Login = () => {
                 type="email"
                 name="email"
                 className="form-control"
-                placeholder="ex - s24ec006@ms.pict.edu or faculty@pict.edu"
+                placeholder="Enter your PICT email id"
             
                 pattern="^([a-zA-Z0-9._]+)@(ms\.)?pict\.edu$"
                 title="Please enter a valid PICT email (e.g., student@ms.pict.edu or faculty@pict.edu)"
