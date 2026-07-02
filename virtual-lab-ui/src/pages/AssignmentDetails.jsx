@@ -67,7 +67,7 @@ const AssignmentDetails = () => {
     const token = localStorage.getItem("token");
 
     if (!token) {
-      console.error("🚨 SCORE NOT SAVED: No VIP token found in the browser!");
+      console.error(" SCORE NOT SAVED: No VIP token found in the browser!");
       return;
     }
 
@@ -110,7 +110,7 @@ const AssignmentDetails = () => {
   if (isLoading) {
     return (
       <div className="text-center py-5 mt-5">
-        <h4>Loading Lab Data... ⏳</h4>
+        <h4>Loading Lab Data...</h4>
       </div>
     );
   }
@@ -345,73 +345,54 @@ const AssignmentDetails = () => {
       )}
     </div>
   );
-      case "Reference":
-  const mainLibraryLink = labData.references && labData.references.length > 0 ? labData.references[0].url : "#";
-  
-  const otherLinks = labData.references && labData.references.length > 1 ? labData.references.slice(1) : [];
+     case "Reference":
+    // 1. Search the array specifically for the Drive link
+    const driveReference = labData.references?.find(ref => 
+      ref.url.includes("drive.google.com")
+    );
+    
+    // 2. Set the link, or fallback to "#" if it doesn't exist
+    const mainLibraryLink = driveReference ? driveReference.url : "#";
 
-  return (
-    <div className="animation-fade-in">
-      <h4 className="mb-4 fw-bold" style={{ color: "#102b51" }}>
-        Study Resources
-      </h4>
+    return (
+      <div className="animation-fade-in">
+        <h4 className="mb-4 fw-bold" style={{ color: "#102b51" }}>
+          Study Resources
+        </h4>
 
-      <div
-        className="card border-0 rounded-4 p-4 mb-4 shadow-sm"
-        style={{ backgroundColor: "#e2e8f0" }}
-      >
-        <div className="d-flex align-items-center justify-content-between flex-wrap gap-3">
-          <div>
-            <h5 className="fw-bold mb-1" style={{ color: "#0f172a" }}>
-              Course Reference Library
-            </h5>
-            <p className="text-secondary mb-0">
-              Official textbooks and folders recommended for this subject.
-            </p>
+        <div
+          className="card border-0 rounded-4 p-4 mb-4 shadow-sm"
+          style={{ backgroundColor: "#e2e8f0" }}
+        >
+          <div className="d-flex align-items-center justify-content-between flex-wrap gap-3">
+            <div>
+              <h5 className="fw-bold mb-1" style={{ color: "#0f172a" }}>
+                Course Reference Library
+              </h5>
+              <p className="text-secondary mb-0">
+                Official textbooks and folders recommended for this subject.
+              </p>
+            </div>
+
+            {mainLibraryLink !== "#" ? (
+              <a
+                href={mainLibraryLink}
+                target="_blank"
+                rel="noreferrer"
+                className="btn fw-bold px-4 shadow-sm"
+                style={{ backgroundColor: "#102b51", color: "white" }}
+              >
+                Open Library Folder
+              </a>
+            ) : (
+              <button className="btn btn-secondary fw-bold px-4 shadow-sm" disabled>
+                Library Coming Soon
+              </button>
+            )}
           </div>
-
-          {labData.references && labData.references.length > 0 ? (
-            <a
-              href={mainLibraryLink}
-              target="_blank"
-              rel="noreferrer"
-              className="btn fw-bold px-4 shadow-sm"
-              style={{ backgroundColor: "#102b51", color: "white" }}
-            >
-              Open Library Folder
-            </a>
-          ) : (
-            <button className="btn btn-secondary fw-bold px-4 shadow-sm" disabled>
-              Library Coming Soon
-            </button>
-          )}
         </div>
       </div>
-
-      {otherLinks.length > 0 && (
-        <>
-          <h5 className="mb-3 text-secondary fw-bold">
-            Lab-Specific External Links:
-          </h5>
-          <ul className="list-group list-group-flush rounded-3 shadow-sm border">
-            {otherLinks.map((ref, index) => (
-              <li key={index} className="list-group-item bg-white py-3">
-                <a
-                  href={ref.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-decoration-none fw-bold"
-                  style={{ color: "#102b51" }}
-                >
-                   {ref.title}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </>
-      )}
-    </div>
-  );
+    );
       case "Lab Manual":
         return (
           <div className="text-center py-5">
