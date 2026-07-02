@@ -35,11 +35,7 @@ const Subjects = () => {
   };
 
   const handleCardClick = (subject) => {
-    if (subject.name === "Database Management Systems Lab") {
-      navigate("/home", { state: { subjectId: subject._id } });
-    } else {
       navigate(`/subject/${subject._id}/labs`);
-    }
   };
 
   const filteredSubjects = subjects.filter(
