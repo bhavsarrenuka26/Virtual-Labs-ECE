@@ -35,6 +35,21 @@ router.post('/subjects', verifyToken, verifyAdmin, async (req, res) => {
     res.status(500).json({ message: "Server Error creating subject" });
   }
 });
+//add reference
+router.put('/subjects/:id/references', verifyToken, verifyAdmin, async (req, res) => {
+  try {
+    const updated = await Subject.findByIdAndUpdate(
+      req.params.id,
+      { references: req.body.references },
+      { new: true }
+    );
+    if (!updated) return res.status(404).json({ message: "Subject not found" });
+    res.status(200).json({ message: "References updated!", subject: updated });
+  } catch (error) {
+    console.error("Error updating references:", error);
+    res.status(500).json({ message: "Server error updating references." });
+  }
+});
 
 // delete subject
 router.delete('/subjects/:id', verifyToken, verifyAdmin, async (req, res) => {
@@ -59,12 +74,12 @@ router.delete('/subjects/:id', verifyToken, verifyAdmin, async (req, res) => {
   }
 });
 
-
+//get lab by subject
 router.get('/subject/:subjectId', async (req, res) => {
   try {
     const assignments = await Assignment.find({
       subjectId: req.params.subjectId,
-      isActive: { $ne: false } 
+      isActive: { $ne: false }
     }).sort({ assignmentId: 1 });
 
     res.status(200).json(assignments);
@@ -77,7 +92,7 @@ router.get('/subject/:subjectId', async (req, res) => {
 router.get('/', async (req, res) => {
   try {
     const assignments = await Assignment.find({
-      isActive: { $ne: false }       
+      isActive: { $ne: false }
     }).sort({ assignmentId: 1 });
 
     res.status(200).json(assignments);
@@ -103,7 +118,7 @@ router.put('/update/:id', verifyToken, verifyAdmin, async (req, res) => {
     const updatePayload = {
       demoVideoUrl: req.body.demoVideoUrl,
       labManualLink: req.body.labManualLink,
-      references: req.body.references,
+      // references: req.body.references,
     };
 
     if (req.body.info?.theory !== undefined) {
@@ -208,14 +223,12 @@ router.post('/:id/quiz', verifyToken, verifyAdmin, async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     let assignment;
-
     if (mongoose.Types.ObjectId.isValid(req.params.id)) {
       assignment = await Assignment.findOne({
         _id: req.params.id,
-        isActive: { $ne: false }     
+        isActive: { $ne: false }
       });
     } else {
-    
       const dbmsSubject = await Subject.findOne({ name: "Database Management Systems Lab" });
       if (dbmsSubject) {
         assignment = await Assignment.findOne({
@@ -225,16 +238,11 @@ router.get('/:id', async (req, res) => {
         });
       }
     }
-
-    if (!assignment) {
-      return res.status(404).json({ message: "Assignment not found" });
-    }
-
+    if (!assignment) return res.status(404).json({ message: "Assignment not found" });
     res.status(200).json(assignment);
   } catch (error) {
     console.error("Error fetching assignment:", error);
     res.status(500).json({ message: "Server Error" });
   }
 });
-
 module.exports = router;
