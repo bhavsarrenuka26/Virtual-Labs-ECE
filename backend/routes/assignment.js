@@ -118,7 +118,7 @@ router.put('/update/:id', verifyToken, verifyAdmin, async (req, res) => {
     const updatePayload = {
       demoVideoUrl: req.body.demoVideoUrl,
       labManualLink: req.body.labManualLink,
-      // references: req.body.references,
+      references: req.body.references,
     };
 
     if (req.body.info?.theory !== undefined) {
