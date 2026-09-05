@@ -1,18 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 const AILabAssistant = ({ labId }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [question, setQuestion] = useState("");
-  const [response, setResponse] = useState("");
+  const [messages, setMessages] = useState([]); // Replaced 'response' with an array of messages
   const [loading, setLoading] = useState(false);
+  
+  // Ref for auto-scrolling to the bottom of the chat
+  const messagesEndRef = useRef(null);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, loading]);
 
   const askQuestion = async (e) => {
     e.preventDefault();
 
     if (!question.trim()) return;
 
+    // Save the question and clear the input 
+    const currentQuestion = question;
+    setMessages((prev) => [...prev, { sender: 'user', text: currentQuestion }]);
+    setQuestion("");
     setLoading(true);
-    setResponse("");
 
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
@@ -23,22 +33,21 @@ const AILabAssistant = ({ labId }) => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-        body: JSON.stringify({ question, labId }),
+        body: JSON.stringify({ question: currentQuestion, labId }),
       });
 
       const data = await res.json();
 
       if (res.ok) {
-        setResponse(data.answer);
+        setMessages((prev) => [...prev, { sender: 'viro', text: data.answer }]);
       } else {
-        setResponse(data.error || "Something went wrong.");
+        setMessages((prev) => [...prev, { sender: 'viro', text: data.error || "Something went wrong." }]);
       }
     } catch (err) {
       console.error(err);
-      setResponse("Unable to connect to AI Assistant.");
+      setMessages((prev) => [...prev, { sender: 'viro', text: "Unable to connect to AI Assistant." }]);
     } finally {
       setLoading(false);
-      setQuestion("");
     }
   };
 
@@ -64,10 +73,7 @@ const AILabAssistant = ({ labId }) => {
           trigger="morph"
           state="morph-neutral"
           colors="primary:#ffffff,secondary:#ffffff"
-          style={{
-            width: "42px",
-            height: "42px",
-          }}
+          style={{ width: "42px", height: "42px" }}
         ></lord-icon>
       </button>
     );
@@ -106,7 +112,6 @@ const AILabAssistant = ({ labId }) => {
         }}
       >
         <span>Viro - AI Assistant</span>
-
         <button
           onClick={() => setIsOpen(false)}
           style={{
@@ -130,49 +135,43 @@ const AILabAssistant = ({ labId }) => {
           overflowY: "auto",
           padding: "16px",
           background: "#f8fafc",
+          display: "flex",
+          flexDirection: "column",
+          gap: "12px"
         }}
       >
-        {!response ? (
-          <div
-            style={{
-              color: "#64748b",
-              textAlign: "center",
-              marginTop: "120px",
-            }}
-          >
-            <div style={{ fontSize: "50px" }}></div>
+        {messages.length === 0 ? (
+          <div style={{ color: "#64748b", textAlign: "center", marginTop: "120px" }}>
             <p>Ask anything about the experiment.</p>
           </div>
         ) : (
-          <div
-            style={{
-              background: "#e0f2fe",
-              padding: "14px",
-              borderRadius: "14px",
-              lineHeight: "1.7",
-              color: "#0f172a",
-              fontSize: "15px",
-              whiteSpace: "pre-wrap",
-            }}
-          >
-            <strong>Viro:</strong>
-            <div style={{ marginTop: "8px" }}>
-              {response}
+          messages.map((msg, index) => (
+            <div
+              key={index}
+              style={{
+                alignSelf: msg.sender === 'user' ? 'flex-end' : 'flex-start',
+                background: msg.sender === 'user' ? '#1d4ed8' : '#e0f2fe',
+                color: msg.sender === 'user' ? '#ffffff' : '#0f172a',
+                padding: "10px 14px",
+                borderRadius: msg.sender === 'user' ? "14px 14px 2px 14px" : "14px 14px 14px 2px",
+                maxWidth: "85%",
+                lineHeight: "1.5",
+                fontSize: "14px",
+                whiteSpace: "pre-wrap",
+              }}
+            >
+              {msg.text}
             </div>
-          </div>
+          ))
         )}
 
         {loading && (
-          <div
-            style={{
-              marginTop: "15px",
-              color: "#1d4ed8",
-              fontWeight: "500",
-            }}
-          >
+          <div style={{ alignSelf: 'flex-start', color: "#1d4ed8", fontWeight: "500", fontSize: "14px" }}>
             Thinking...
           </div>
         )}
+        {/* Invisible div to scroll to */}
+        <div ref={messagesEndRef} />
       </div>
 
       <form
@@ -201,7 +200,6 @@ const AILabAssistant = ({ labId }) => {
             minWidth: "0", 
           }}
         />
-
         <button
           type="submit"
           disabled={loading || !question.trim()}
@@ -213,6 +211,7 @@ const AILabAssistant = ({ labId }) => {
             borderRadius: "12px",
             fontWeight: "600",
             flexShrink: 0, 
+            cursor: (loading || !question.trim()) ? "not-allowed" : "pointer"
           }}
         >
           Ask
