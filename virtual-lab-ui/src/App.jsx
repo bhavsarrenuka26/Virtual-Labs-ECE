@@ -23,36 +23,36 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 
 
-import AILabAssistant from "./components/AILabAssistant";
+//import AILabAssistant from "./components/AILabAssistant";
 
 
-const GlobalAIAssistant = () => {
-  const location = useLocation();
-
-  
-  const hideOnPages = ["/admin-dashboard", "/about", "/team", "/login"];
+// const GlobalAIAssistant = () => {
+//   const location = useLocation();
 
   
-  if (hideOnPages.includes(location.pathname)) {
-    return null;
-  }
+//   const hideOnPages = ["/admin-dashboard", "/about", "/team", "/login"];
+
+  
+//   if (hideOnPages.includes(location.pathname)) {
+//     return null;
+//   }
 
  
-  return (
-    <div
-      style={{
-        position: "fixed",
-        bottom: "20px",
-        right: "20px",
-        zIndex: 1000,
-        width: "350px",
-      }}
-    >
+//   return (
+//     <div
+//       style={{
+//         position: "fixed",
+//         bottom: "20px",
+//         right: "20px",
+//         zIndex: 1000,
+//         width: "350px",
+//       }}
+//     >
      
-      <AILabAssistant labId={null} />
-    </div>
-  );
-};
+//       {/* <AILabAssistant labId={null} /> */}
+//     </div>
+//   );
+// };
 
 
 const Layout = ({ children }) => {
@@ -68,8 +68,8 @@ const Layout = ({ children }) => {
       <main className="flex-grow-1">{children}</main>
 
       {showFooter && <Footer />}
-
-      <GlobalAIAssistant />
+{/* 
+      <GlobalAIAssistant /> */}
     </div>
   );
 };
